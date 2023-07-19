@@ -1,7 +1,10 @@
 package com.bikkadit.electronic.store.service.Impl;
 
 import com.bikkadit.electronic.store.config.AppConstant;
+import com.bikkadit.electronic.store.dto.PageableResponse;
 import com.bikkadit.electronic.store.dto.UserDto;
+import com.bikkadit.electronic.store.exception.ResourceNotFoundException;
+import com.bikkadit.electronic.store.helper.Helper;
 import com.bikkadit.electronic.store.model.User;
 import com.bikkadit.electronic.store.repository.UserRepository;
 import com.bikkadit.electronic.store.service.ServiceI;
@@ -9,9 +12,18 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.IIOException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import java.util.UUID;
@@ -27,6 +39,9 @@ public class UserServiceImpl implements ServiceI {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Value("${user.profile.image.path}")
+    private String imagePath;
+
     private static Logger logger1 = LoggerFactory.getLogger(UserServiceImpl.class);
 
     /**
@@ -39,7 +54,7 @@ public class UserServiceImpl implements ServiceI {
     public UserDto createUser(UserDto userDto) {
         logger1.info("Create user method started!!");
         String userId = UUID.randomUUID().toString();
-        logger1.info("created user Id {}",userId);
+        logger1.info("created user Id {}", userId);
         userDto.setId(userId);
         User user = dtoToEntity(userDto);
         User savedUser = userRepository.save(user);
@@ -60,7 +75,7 @@ public class UserServiceImpl implements ServiceI {
     public UserDto updateUser(UserDto userDto, String id) {
 
         logger1.info("Request send to repository for updating buisiness logic for user");
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         user.setName(userDto.getName());
         user.setAbout(user.getAbout());
         user.setGender(user.getGender());
@@ -80,8 +95,24 @@ public class UserServiceImpl implements ServiceI {
     @Override
     public void deleteUser(String id) {
         logger1.info("Request send to repository for deleting user");
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         logger1.info("User deleted successfully !!");
+
+        String fullPath = imagePath + user.getImageName();
+        try {
+            Path path = Paths.get(fullPath);
+            Files.delete(path);
+        } catch (NoSuchFileException e) {
+
+            logger1.info("User Image Not Found In Folder");
+
+            e.printStackTrace();
+        } catch (IOException e1) {
+
+            e1.printStackTrace();
+
+        }
+
         userRepository.delete(user);
     }
 
@@ -90,12 +121,15 @@ public class UserServiceImpl implements ServiceI {
      * @Auther vaibhav
      */
     @Override
-    public List<UserDto> getAll() {
+    public PageableResponse<UserDto> getAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         logger1.info("Request send to repository for find all ");
-        List<User> userList = userRepository.findAll();
+        Page<User> page = userRepository.findAll(pageable);
+        List<User> userList = page.getContent();
         List<UserDto> dtoList = userList.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
         logger1.info("Get All user list of all users...");
-        return dtoList;
+        PageableResponse<UserDto> pageableResponse = Helper.getPageableResponse(page, UserDto.class);
+        return pageableResponse;
     }
 
     /**
@@ -106,7 +140,7 @@ public class UserServiceImpl implements ServiceI {
     @Override
     public UserDto getSingleUser(String id) {
         logger1.info("Request send to repository to get single use by its id");
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         logger1.info("successfully get the single user data{}", id);
         return entityToDto(user);
     }
@@ -119,7 +153,7 @@ public class UserServiceImpl implements ServiceI {
     @Override
     public UserDto GetUserByEmail(String email) {
         logger1.info("Request send to repository to get single use by its email{}", email);
-        User user1 = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(AppConstant.USER_NOT_FOUND_BY_EMAIL));
+        User user1 = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND_BY_EMAIL));
         return entityToDto(user1);
     }
 
