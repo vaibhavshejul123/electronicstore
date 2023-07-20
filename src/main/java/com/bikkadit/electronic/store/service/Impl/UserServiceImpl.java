@@ -75,7 +75,7 @@ public class UserServiceImpl implements ServiceI {
     public UserDto updateUser(UserDto userDto, String id) {
 
         logger1.info("Request send to repository for updating buisiness logic for user");
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User","userId","UserId"));
         user.setName(userDto.getName());
         user.setAbout(user.getAbout());
         user.setGender(user.getGender());
@@ -95,7 +95,7 @@ public class UserServiceImpl implements ServiceI {
     @Override
     public void deleteUser(String id) {
         logger1.info("Request send to repository for deleting user");
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User","userId","UserId"));
         logger1.info("User deleted successfully !!");
 
         String fullPath = imagePath + user.getImageName();
@@ -140,7 +140,7 @@ public class UserServiceImpl implements ServiceI {
     @Override
     public UserDto getSingleUser(String id) {
         logger1.info("Request send to repository to get single use by its id");
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User","userId","UserId"));
         logger1.info("successfully get the single user data{}", id);
         return entityToDto(user);
     }
@@ -153,7 +153,7 @@ public class UserServiceImpl implements ServiceI {
     @Override
     public UserDto GetUserByEmail(String email) {
         logger1.info("Request send to repository to get single use by its email{}", email);
-        User user1 = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND_BY_EMAIL));
+        User user1 = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User","userId","UserId"));
         return entityToDto(user1);
     }
 

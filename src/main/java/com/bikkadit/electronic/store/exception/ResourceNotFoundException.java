@@ -5,11 +5,14 @@ import lombok.Builder;
 @Builder
 public class ResourceNotFoundException extends RuntimeException{
 
-    public ResourceNotFoundException(){
+    private String resource;
+    private String field;
+    private String value;
 
-        super("Resource Not Found ");
-    }
-    public  ResourceNotFoundException( String messege){
-       super(messege);
+    public ResourceNotFoundException(String resource, String field, String value) {
+        super(String.format("%s not found for %s : %s", resource, field, value));
+        this.resource = resource;
+        this.field = field;
+        this.value = value;
     }
 }
