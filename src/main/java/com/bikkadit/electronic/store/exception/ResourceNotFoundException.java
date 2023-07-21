@@ -3,7 +3,7 @@ package com.bikkadit.electronic.store.exception;
 import lombok.Builder;
 
 @Builder
-public class ResourceNotFoundException extends RuntimeException{
+public class ResourceNotFoundException extends RuntimeException {
 
     private String resource;
     private String field;

@@ -3,6 +3,7 @@ package com.bikkadit.electronic.store.dto;
 import lombok.*;
 
 import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

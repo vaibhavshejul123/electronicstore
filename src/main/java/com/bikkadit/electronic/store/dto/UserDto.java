@@ -30,13 +30,13 @@ public class UserDto {
     @Size(min = 3, max = 10, message = "Password must be min of 3 chars and max of 10 chars")
     private String password;
 
-    @NotBlank(message ="Write something yourself !!")
+    @NotBlank(message = "Write something yourself !!")
     private String about;
 
-    @Size(min= 3,max=6,message ="Invalid gender !!")
+    @Size(min = 3, max = 6, message = "Invalid gender !!")
     private String gender;
 
     @ImageNameValid
-    private String imagename;
+    private String imageName;
 
 }

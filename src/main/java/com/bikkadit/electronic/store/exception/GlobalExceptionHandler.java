@@ -22,10 +22,10 @@ public class GlobalExceptionHandler {
     private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     /**
-     * @Auther vaibhav
-     * @ApiNote Handle Resource Not Found Exception
      * @param ex
      * @return
+     * @Auther vaibhav
+     * @ApiNote Handle Resource Not Found Exception
      */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> resourceNotFoundExcetiom(ResourceNotFoundException ex) {
@@ -36,10 +36,10 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * @Auther vaibhav
-     * @ApiNote This api for handle MethodArgumentNotValidException
      * @param ex
      * @return response
+     * @Auther vaibhav
+     * @ApiNote This api for handle MethodArgumentNotValidException
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleMethodArgumentNotFoundException(MethodArgumentNotValidException ex) {
@@ -57,6 +57,13 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * @param ex
+     * @return status code, response
+     * @Auther vaibhav
+     * @apiNote api for handle bad request
+     */
     @ExceptionHandler(BadApiRequest.class)
     public ResponseEntity<ApiResponse> handleBadApiRequest(BadApiRequest ex) {
         logger.info("Bad Api Request !!");

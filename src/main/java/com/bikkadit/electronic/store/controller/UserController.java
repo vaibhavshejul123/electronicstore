@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -138,7 +137,7 @@ public class UserController {
      * @return
      * @Auther vaibhav
      */
-    @GetMapping("/serch/{keyword}")
+    @GetMapping("/search/{keyword}")
     public ResponseEntity<List<UserDto>> searchUser(@PathVariable String keyword) {
         logger.info("method started !!");
         logger.info("Request send to serviceI for search user in database {}", keyword);
@@ -153,7 +152,7 @@ public class UserController {
 
         String imageName = fileService.uploadImage(imageUploadPath,image);
         UserDto user = serviceI.getSingleUser(userId);
-        user.setImagename(imageName);
+        user.setImageName(imageName);
         UserDto userDto = serviceI.updateUser(user, userId);
         ImageResponse imageResponse = ImageResponse.builder().imageName(imageName).success(true).status(HttpStatus.CREATED).build();
         return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
@@ -163,8 +162,8 @@ public class UserController {
     public void serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
 
         UserDto user = serviceI.getSingleUser(userId);
-        logger.info("User Image Name {}", user.getImagename());
-        InputStream resource = fileService.getResource(imageUploadPath, user.getImagename());
+        logger.info("User Image Name {}", user.getImageName());
+        InputStream resource = fileService.getResource(imageUploadPath, user.getImageName());
 
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(resource, response.getOutputStream());

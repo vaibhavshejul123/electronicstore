@@ -17,7 +17,14 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService {
     private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
-
+    /**
+     * @Auther vaibhav shejul
+     * @param Path
+     * @param file
+     * @return fileNameWithExtension
+     * @throws IOException
+     * @apiNote api for upload image
+     */
     @Override
     public String uploadImage(String Path, MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
@@ -43,6 +50,14 @@ public class FileServiceImpl implements FileService {
 
     }
 
+    /**
+     * @Auther vaibhav shejul
+     * @apiNote api for get the resource os serve image
+     * @param path
+     * @param name
+     * @return inputStream
+     * @throws FileNotFoundException
+     */
     @Override
     public InputStream getResource(String path, String name) throws FileNotFoundException {
 

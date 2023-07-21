@@ -80,7 +80,7 @@ public class UserServiceImpl implements ServiceI {
         user.setAbout(user.getAbout());
         user.setGender(user.getGender());
         user.setPassword(user.getPassword());
-        user.setImageName(userDto.getImagename());
+        user.setImageName(userDto.getImageName());
         User updatedUser = userRepository.save(user);
         logger1.info("save Updated user successfully !!");
         UserDto updatedDto = entityToDto(updatedUser);
