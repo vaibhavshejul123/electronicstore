@@ -17,19 +17,20 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService {
     private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
+
     @Override
-    public String uploadImage(MultipartFile file, String path) throws IOException {
+    public String uploadImage(String Path, MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
         logger.info("FileName :{}", originalFilename);
         String filename = UUID.randomUUID().toString();
         String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String fileNameWithExtension = filename + extension;
-        String fullPathWithFileName = path + fileNameWithExtension;
+        String fullPathWithFileName = Path + fileNameWithExtension;
 
         logger.info("image name with full path {}", fullPathWithFileName);
         if (extension.equalsIgnoreCase(".png") || extension.equalsIgnoreCase(".jpg") || extension.equalsIgnoreCase(".jpeg")) {
 
-            File folder = new File(path);
+            File folder = new File(Path);
             logger.info("file extension {}", extension);
             if (!folder.exists()) {
                 folder.mkdirs();
