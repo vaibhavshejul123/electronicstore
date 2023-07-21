@@ -128,6 +128,7 @@ public class UserController {
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
         logger.info("Request send to serviceI for get user by email {}", email);
         UserDto userByEmail = serviceI.GetUserByEmail(email);
+
         logger.info("get single user email found Successfully !!{}", email);
         return new ResponseEntity<>(userByEmail, HttpStatus.OK);
     }
