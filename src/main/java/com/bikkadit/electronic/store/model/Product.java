@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "products")
@@ -44,4 +45,12 @@ public class Product {
     @JoinColumn(name = "fk_category_id")
     private Category category;
 
+    public void setcreatedAt(Date date) {
+    }
+
+    public void setcreatedBy(String createdBy) {
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+    }
 }

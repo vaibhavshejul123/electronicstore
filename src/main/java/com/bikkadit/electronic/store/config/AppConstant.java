@@ -20,6 +20,5 @@ public class AppConstant {
 
     public static final String IMAGE_MESSAGE = "Image Not Found !!";
 
-    public static final String PRODUCT_URL = "/api/product";
 
 }
